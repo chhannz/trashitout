@@ -1,16 +1,25 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TrashCollector : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public UnityEvent OnTrashCollected;
+    private void OnTriggerEnter2D(Collider2D obj)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(obj.CompareTag("trashbag"))
+        {
+            OnTrashCollected?.Invoke();
+            
+            TrashItem item = obj.GetComponent<TrashItem>();
+            if (item != null)
+            {
+                item.ReturnToPool();
+            }
+            else
+            {
+                Destroy(obj.gameObject);
+            }
+        }
     }
 }
